@@ -20,9 +20,9 @@
    :align: center
    :alt: FWeather logo
 
-====================================================================================
-FWeather, an open-source Python package for agro-meteorological time series analysis
-====================================================================================
+======================================================================
+FWeather - Python package for agro-meteorological time series analysis
+======================================================================
 
 
 .. image:: https://img.shields.io/badge/License-GPLv3-blue.svg
