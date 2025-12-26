@@ -68,7 +68,7 @@ The FWeather library has a group of functions, some of which are:
 
 - ``data_cube``: create multi-dimensional arrays from forecast and historical weather data as xarray.
 
-- ``get_timeseries_data_cube``: returns in list format the climate data time series from FWeather's ``data_cube``.
+- ``get_timeseries_data_cube``: returns the climate data time series from FWeather's ``data_cube``.
 
 Installation
 ============
