@@ -22,13 +22,24 @@ def get_timeseries(stac_url, collection, start_date, end_date, band, geom):
         bands=[band],
         geom=geom
     )
+    if (collection == "prec_merge_daily-1"):
+        ts=get_timeseries_data_cube(
+            datacube=temp_data_cube,
+            geom=geom,
+            band=dataset
+        )
+        new_ts = []
+        for value in ts['values']:
+            new_ts.append(float(value))
 
-    timeline = temp_data_cube.coords['time'].values
-    ts = []
-    for value in temp_data_cube[dataset].values:
-        ts.append(float(value))
+        return dict(values=new_ts, timeline=ts['timeline'])
+    else:
+        timeline = temp_data_cube.coords['time'].values
+        ts = []
+        for value in temp_data_cube[dataset].values:
+            ts.append(float(value))
 
-    return dict(values=ts, timeline=timeline)
+        return dict(values=ts, timeline=timeline)
 
 
 def get_bbox(geom, radius_meters=20):
