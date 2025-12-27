@@ -19,10 +19,16 @@
 Changes
 =======
 
-0.4 (2025-11-05)
+0.4 (2025-12-31)
 ------------------
 
-* **New Functions**: Added `save_xarray`
+* **New Function**: Added ``get_timeseries`` function for retrieving forecasts and weather time series data.
+* **Examples**: Added new script ``timeseries.py`` in the examples folder using the same structure as previous examples.
+* **Notebook Reorganization**: Organized Jupyter notebooks:
+  * ``fhws-datacube-precipitation.ipynb`` - Create a precipitation data cube using MERGE Daily
+  * ``fhws-datacube-temperature.ipynb`` - Create a temperature data cube using SAMeT Daily
+  * ``fhws-datacube-utils.ipynb`` - Use the save and load data cube support functions
+  * ``fhws-timeseries.ipynb`` - Retrieve forecast and weather time series
 
 0.3.2 (2025-11-05)
 ------------------
