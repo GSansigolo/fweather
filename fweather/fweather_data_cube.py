@@ -3,6 +3,7 @@ import pyproj
 import tempfile
 import rasterio
 import pandas as pd
+from shapely import Point
 import xarray as xr
 from datetime import datetime
 from pyproj import Transformer
@@ -15,10 +16,10 @@ from fweather.fweather_core import name_band
 
 fs = fsspec.filesystem('https')
 
-def data_cube(stac_url, collection, start_date, end_date, tile=None, bbox=None, freq=None, bands=None):
+def data_cube(stac_url, collection, start_date, end_date, tile=None, bbox=None, freq=None, bands=None, geom=None):
     
     stac = Client.open(stac_url)
-
+    
     collection=dict(
         collection=collection, 
         start_date=start_date,
@@ -31,8 +32,12 @@ def data_cube(stac_url, collection, start_date, end_date, tile=None, bbox=None, 
         return print(f"{collection['collection']} collection not yet supported.")
     
     bands_dict = collection_get_list(stac, collection)
-                
-    bbox = tuple(map(float, collection['bbox'].split(',')))
+    
+    if (geom):
+        lat, lon = geom[0]['coordinates'] 
+        point = Point(lon, lat)
+    else:
+        bbox = tuple(map(float, collection['bbox'].split(',')))
     
     sample_image_path = bands_dict[bands[0]][0]
     
@@ -41,12 +46,15 @@ def data_cube(stac_url, collection, start_date, end_date, tile=None, bbox=None, 
     else:
         with rasterio.open(sample_image_path) as src:
             data_proj = src.crs
-        
-    proj_converter = Transformer.from_crs(pyproj.CRS.from_epsg(4326), data_proj, always_xy=True).transform
 
-    bbox_polygon = box(*bbox)
-    reproj_bbox = transform(proj_converter, bbox_polygon)
-    
+    if (geom):
+        proj_converter = Transformer.from_crs(pyproj.CRS.from_epsg(4326), data_proj, always_xy=True).transform
+        reproj_point = transform(proj_converter, point)
+    else:
+        proj_converter = Transformer.from_crs(pyproj.CRS.from_epsg(4326), data_proj, always_xy=True).transform
+        bbox_polygon = box(*bbox)
+        reproj_bbox = transform(proj_converter, bbox_polygon)
+        
     list_da = []
 
     if (collection['collection'] == "prec_merge_daily-1"): 
@@ -86,18 +94,21 @@ def data_cube(stac_url, collection, start_date, end_date, tile=None, bbox=None, 
                 f = fs.open(image)
                 ds = xr.open_dataset(f)
                 
-                min_lon, min_lat, max_lon, max_lat = map(float, collection['bbox'].split(','))
-                bbox = {
-                    'min_lon': min_lon,
-                    'max_lon': max_lon,
-                    'min_lat': min_lat,
-                    'max_lat': max_lat
-                }
+                if (geom):
+                    clipped_ds = ds.sel(lon=lon,lat=lat,method='nearest')
+                else:
+                    min_lon, min_lat, max_lon, max_lat = map(float, collection['bbox'].split(','))
+                    bbox = {
+                        'min_lon': min_lon,
+                        'max_lon': max_lon,
+                        'min_lat': min_lat,
+                        'max_lat': max_lat
+                    }
 
-                clipped_ds = ds.sel(
-                    lon=slice(bbox['min_lon'], bbox['max_lon']),
-                    lat=slice(bbox['min_lat'], bbox['max_lat'])
-                )
+                    clipped_ds = ds.sel(
+                        lon=slice(bbox['min_lon'], bbox['max_lon']),
+                        lat=slice(bbox['min_lat'], bbox['max_lat'])
+                    )
 
                 ds_dropped = clipped_ds.drop_vars("nobs")
                 data_cube = xr.merge([data_cube, ds_dropped])

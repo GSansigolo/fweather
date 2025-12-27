@@ -66,9 +66,11 @@ This repository contains FWeather, an open-source Python package for agro-meteor
 
 The FWeather library has a group of functions, some of which are: 
 
-- ``data_cube``: create multi-dimensional arrays from forecast and historical weather data as xarray.
+- ``data_cube``: create multi-dimensional arrays from agro-meteorological data.
 
-- ``get_timeseries_data_cube``: returns the climate data time series from FWeather's ``data_cube``.
+- ``get_timeseries``: return a agro-meteorological time series.
+
+- ``get_timeseries_data_cube``:return a agro-meteorological time series from a ``data_cube``.
 
 Installation
 ============
