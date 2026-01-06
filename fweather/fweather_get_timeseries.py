@@ -29,17 +29,21 @@ def get_timeseries(stac_url, collection, start_date, end_date, band, geom):
             band=dataset
         )
         new_ts = []
-        for value in ts['values']:
-            new_ts.append(float(value))
+        new_tl = []
+        for i in range(len(ts['values'])):
+            new_ts.append(float(ts['values'][i]))
+            new_tl.append(str(ts['timeline'][i])[:19])
 
-        return dict(values=new_ts, timeline=ts['timeline'])
+        return dict(values=new_ts, timeline=new_tl)
     else:
         timeline = temp_data_cube.coords['time'].values
         ts = []
-        for value in temp_data_cube[dataset].values:
-            ts.append(float(value))
+        tl = []
+        for i in range(len(temp_data_cube[dataset].values)):
+            ts.append(float(temp_data_cube[dataset].values[i]))
+            tl.append(str(timeline[i])[:19])
 
-        return dict(values=ts, timeline=timeline)
+        return dict(values=ts, timeline=tl)
 
 
 def get_bbox(geom, radius_meters=20):
