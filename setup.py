@@ -16,7 +16,7 @@ setup(
     packages=find_packages(),
     include_package_data=True,
     version = VERSION,
-    description='Python package for agrometeorological time series analysis',
+    description='Python package for meteorological time series analysis',
     author='Gabriel Sansigolo',
     author_email = "gabrielsansigolo@gmail.com",
     url = "https://github.com/GSansigolo/fweather",

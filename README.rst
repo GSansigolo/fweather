@@ -20,9 +20,9 @@
    :align: center
    :alt: fweather logo
 
-=====================================================================
-fweather - Python package for agrometeorological time series analysis
-=====================================================================
+=================================================================
+fweather - Python package for meteorological time series analysis
+=================================================================
 
 
 .. image:: https://img.shields.io/badge/License-GPLv3-blue.svg
@@ -58,11 +58,11 @@ fweather - Python package for agrometeorological time series analysis
 About
 =====
 
-The development of software to manipulate weather and climate data has always been challenging, this difficulties scale with the growing volume of satellite images currently available. To overcome the challenges, we need to develop tools that can process data sets using the advantages of a server-side infrastructure. 
+The development of software to manipulate meteorological data has always been challenging, this difficulties scale with the growing volume of satellite images currently available. To overcome the challenges, we need to develop tools that can process data sets using the advantages of a server-side infrastructure. 
 
-In order to perform large-scale agriculture monitoring, we need to have dedicated packages that target the peculiarities of the large-scale data analysis. Weather and climate data packages have been modeled for a specific type of operation, typically targeting analysts with programming background, and they in most part are not prepared to deal with big data. 
+In order to perform large-scale agriculture monitoring, we need to have dedicated packages that target the peculiarities of the large-scale data analysis. Meteorological data packages have been modeled for a specific type of operation, typically targeting analysts with programming background, and they in most part are not prepared to deal with big data. 
 
-This repository contains fweather, a free and open-source Python package for agrometeorological time series analysis. It used the concept of Cloud optimized GeoTIFFs (COG) for retrieving weather and climate data as virtual data cubes, facilitating the retrieval of time series. It provides methods of building a virtual data cube and retrieving time series of cumulative precipitation, daily precipitation, temperature and climate change projections. With the package, it’s possible to perform large-scale agriculture monitoring using weather time series with no need to download data locally and programming skills. 
+This paper describes fweather, a free and open-source Python package for forecasts, weather and climate time series analysis. It used the SpatioTemporal Asset Catalog (STAC) to access meteorological data and retrieve it as virtual data cubes, facilitating the retrieval of time series. It provides methods of building a virtual data cube and retrieving time series of cumulative precipitation, daily precipitation, temperature and climate change projections. With the package, it’s possible to perform large-scale agriculture monitoring using meteorological time series with no need to download data locally and programming skills.
 
 The fweather library has a group of functions, some of which are: 
 
