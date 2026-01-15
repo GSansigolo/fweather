@@ -1,6 +1,6 @@
 ..
-    This file is part of Python Client Library for FWeather.
-    Copyright (C) 2025 INPE.
+    This file is part of fweather - Python package for meteorological time series analysis.
+    Copyright (C) 2026 INPE.
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
