@@ -70,8 +70,6 @@ The fweather package has a group of functions, some of which are:
 
 - ``get_timeseries``: return a weather and climate time series.
 
-- ``get_timeseries_data_cube``: return a weather and climate time series from a ``data_cube``.
-
 Installation
 ============
 
