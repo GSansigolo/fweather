@@ -26,7 +26,7 @@ setup(
         "numpy",
         "urllib3==2.2.2",
         "requests==2.32.3",
-        "pandas==2.2.2",
+        "pandas>=2.2.3",
         "scipy==1.13.1",
         "datetime==5.5",
         "rasterio==1.3.11",
