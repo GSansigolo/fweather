@@ -27,7 +27,7 @@ setup(
         "urllib3==2.2.2",
         "requests==2.32.3",
         "pandas>=2.2.3",
-        "scipy>=1.15.0"
+        "scipy>=1.15.0",
         "datetime==5.5",
         "rasterio==1.3.11",
         "rioxarray",
