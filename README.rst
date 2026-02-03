@@ -75,7 +75,7 @@ The fweather package has a group of functions, some of which are:
 Installation
 ============
 
-See `INSTALL.rst <https://github.com/GSansigolo/fweather/blob/master/INSTALL.rst>`_.
+See `Installation <https://fweather.readthedocs.io/en/latest/users-guide/installation.html>`_.
 
 
 Documentation
