@@ -31,11 +31,7 @@ from unittest.mock import MagicMock
 import os
 import sys
 
-sys.path.insert(0, os.path.abspath("../.."))
-sys.path.insert(0, os.path.abspath('../'))
-sys.path.insert(0, os.path.abspath(".."))
-
-
+sys.path.insert(0, os.path.abspath("../../"))
 
 # -- Project information -----------------------------------------------------
 
@@ -52,8 +48,21 @@ autosummary_generate = False
 autodoc_mock_imports = [
     "osgeo",
     "osgeo.gdal",
+    "rasterio",
+    "numpy",
+    "xarray",
+    "pandas",
+    "rioxarray",
+    "pystac_client",
+    "shapely",
+    "fsspec",
+    "cfgrib",
+    "urllib3",
+    "requests",
+    "tqdm",
+    "aiohttp",
+    "h5netcdf"
 ]
-
 
 extensions = [
     'sphinx.ext.autodoc',
