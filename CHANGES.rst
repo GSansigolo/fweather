@@ -19,7 +19,7 @@
 Changes
 =======
 
-0.4 (2026-01-19)
+0.4 (2026-02-03)
 ------------------
 
 * **New Function**: Added ``get_timeseries`` function for retrieving meteorological time series data.
@@ -29,12 +29,13 @@ Changes
     * ``fhws-datacube-temperature.ipynb`` - Create a temperature data cube using SAMeT Daily
     * ``fhws-datacube-utils.ipynb`` - Use the save and load data cube support functions
     * ``fhws-timeseries.ipynb`` - Retrieve meteorological time series
+* **Documentation**: Added comprehensive Sphinx documentation with API reference for all functions, usage examples, and detailed parameter descriptions.
 
 0.3.2 (2025-11-05)
 ------------------
 
-* **New Functions**: Added `save_xarray` and `load_xarray` functions for saving and loading xarray objects to/from xarray.
-* **New Notebook**: Added ``fweather-data-cube-preciptation_save_load.ipynb`` example notebook demonstrating usage of the new save/load functions.
+* **New Functions**: Added ``save_xarray`` and ``load_xarray`` functions for saving and loading xarray objects to/from xarray.
+* **New Notebook**: Added fweather-data-cube-preciptation_save_load.ipynb`` example notebook demonstrating usage of the new save/load functions.
 
 0.2.1 (2025-10-28)
 ------------------

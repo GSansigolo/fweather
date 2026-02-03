@@ -6,18 +6,7 @@ from fweather.fweather_core import geometry_collides_with_bbox
 
 
 def filter_scenes(collection, data_dir, bbox):
-    """
-    Return scenes from data_dir where the geometry collides with the bounding box.
-    
-    Args:
-        collection: A string with BDC collection id
-        data_dir: A string with directory
-        bbox: A tuple in (minx, miny, maxx, maxy) format
-        
-    Returns:
-        list: Scenes filtered by when geometry collides with the bounding box.
-    """
-    
+       
     # Collection Metadata
     collection_metadata = load(open(os.path.join(data_dir, collection, str(collection+".json")), 'r', encoding='utf-8'))
     

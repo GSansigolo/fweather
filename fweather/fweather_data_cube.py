@@ -17,7 +17,33 @@ from fweather.fweather_core import name_band
 fs = fsspec.filesystem('https')
 
 def data_cube(stac_url, collection, start_date, end_date, tile=None, bbox=None, freq=None, bands=None, geom=None):
+    """
+
+    Create a virtual data cubes using SpatioTemporal Asset Catalog (STAC).
     
+    Args:
+        stac_url (str): URL endpoint of the STAC API to query.
+        collection (str): STAC collection identifier to retrieve data from.
+        start_date (str): Start date for temporal filtering in 'YYYY-MM-DD' format.
+        end_date (str): End date for temporal filtering in 'YYYY-MM-DD' format.
+        bbox (str/list, optional): Bounding box coordinates for spatial filtering.
+            Can be a string of comma-separated values or a list [minx, miny, maxx, maxy].
+            Defaults to None.
+        bands (list): List of spectral band identifiers to include.
+            Defaults to None.
+        geom (str/dict, optional): GeoJSON geometry for spatial filtering.
+            Defaults to None.
+    
+    Example:
+        >>> prec_merge_cube = data_cube(
+        ...     stac_url=stac_url,
+        ...     collection="prec_merge_daily-1",
+        ...     start_date="2024-01-01",
+        ...     end_date="2024-12-31",
+        ...     bbox="-47.2797,-17.0725,-45.4779,-15.4485",
+        ...     bands=["merge_daily"]
+        ... )
+    """
     stac = Client.open(stac_url)
     
     collection=dict(

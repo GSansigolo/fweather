@@ -23,3 +23,12 @@ conda install -c conda-forge cfgrib=0.9.15.0 -y
 conda install -c conda-forge pystac-client -y
 conda install -c conda-forge build -y
 conda install -c conda-forge matplotlib -y
+
+pip install \
+  "myst-parser>=4.0.0,<4.1" \
+  "sphinx-copybutton>=0.5.2,<1.0.0" \
+  "sphinx-design>=0.6.1,<0.7" \
+  "sphinx-colorschemed-images>=0.2.0" \
+  "sphinx-nefertiti==0.9.1" \
+  "roman-numerals==4.1.0" \
+  "roman-numerals-py==4.1.0"

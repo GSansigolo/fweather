@@ -9,7 +9,28 @@ from fweather.fweather_utils import get_all_bands_configs
 
 
 def get_timeseries(stac_url, collection, start_date, end_date, band, geom):
+    """
+    Retrieve time series data for a specific band at given geographic locations.
     
+    Args:
+        stac_url (str): URL endpoint of the STAC API to query.
+        collection (str): STAC collection identifier to retrieve data from.
+        start_date (str): Start date for temporal filtering in 'YYYY-MM-DD' format.
+        end_date (str): End date for temporal filtering in 'YYYY-MM-DD' format.
+        band (str): Spectral band identifier for which to retrieve time series data.
+        geom (list): List of point geometries as dictionaries with 'coordinates' key,
+                     where each dictionary contains coordinates as [longitude, latitude].
+    
+    Example:
+        >>> ts = get_timeseries(
+        ...     stac_url=stac_url,
+        ...     collection="samet_daily-1",
+        ...     start_date="2024-01-01",
+        ...     end_date="2024-12-31",
+        ...     band="tmean",
+        ...     geom=[dict(coordinates=[-11.739, -45.753])],
+        ... )
+    """
     bands_dict = get_all_bands_configs()
     dataset = bands_dict[collection][band][0]['dataset_name']
 

@@ -111,7 +111,7 @@ def geometry_collides_with_bbox(geometry,input_bbox):
     
     Args:
         geometry: A Shapely geometry object (Polygon, LineString, Point, etc.)
-        bbox: A tuple in (minx, miny, maxx, maxy) format
+        input_bbox: A tuple in (minx, miny, maxx, maxy) format
         
     Returns:
         bool: True if the geometry intersects with the bbox, False otherwise
