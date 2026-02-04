@@ -76,6 +76,12 @@ Installation
 See `Installation <https://fweather.readthedocs.io/en/latest/users-guide/installation.html>`_.
 
 
+Changes
+=======
+
+See `Changes <https://fweather.readthedocs.io/en/latest/history.html>`_.
+
+
 Documentation
 =============
 
