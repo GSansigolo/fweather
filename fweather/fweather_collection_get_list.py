@@ -26,7 +26,7 @@ def collection_get_list(stac, datacube):
     if (datacube['bbox']):
         item_search = stac.search(
             collections=[collection],
-            datetime=start_date+"T00:00:00Z/"+end_date+"T23:59:00Z",
+            datetime=f"{start_date}T00:00:00Z/{end_date}T00:00:00Z",
             bbox=bbox,
             limit=365
         )
