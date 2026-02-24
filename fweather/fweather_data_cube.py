@@ -111,7 +111,18 @@ def data_cube(stac_url, collection, start_date, end_date, tile=None, bbox=None, 
                         list_da.append(da)
                 except:
                     pass
+
             data_cube = xr.combine_by_coords(list_da)
+
+        min_lon, min_lat, max_lon, max_lat = map(float, collection['bbox'].split(','))
+
+        min_lon_360 = min_lon + 360 if min_lon < 0 else min_lon
+        max_lon_360 = max_lon + 360 if max_lon < 0 else max_lon
+
+        cropped_cube = data_cube.sel(
+            latitude=slice(min_lat, max_lat),
+            longitude=slice(min_lon_360, max_lon_360)
+        )
 
     elif (collection['collection'] == "samet_daily-1"): 
         data_cube = xr.Dataset()
@@ -121,24 +132,21 @@ def data_cube(stac_url, collection, start_date, end_date, tile=None, bbox=None, 
                 ds = xr.open_dataset(f)
                 
                 if (geom):
-                    clipped_ds = ds.sel(lon=lon,lat=lat,method='nearest')
+                    cropped_cube = ds.sel(lon=lon,lat=lat,method='nearest')
                 else:
                     min_lon, min_lat, max_lon, max_lat = map(float, collection['bbox'].split(','))
-                    bbox = {
-                        'min_lon': min_lon,
-                        'max_lon': max_lon,
-                        'min_lat': min_lat,
-                        'max_lat': max_lat
-                    }
+                    
+                    min_lon_360 = min_lon + 360 if min_lon < 0 else min_lon
+                    max_lon_360 = max_lon + 360 if max_lon < 0 else max_lon
 
-                    clipped_ds = ds.sel(
-                        lon=slice(bbox['min_lon'], bbox['max_lon']),
-                        lat=slice(bbox['min_lat'], bbox['max_lat'])
+                    cropped_cube = data_cube.sel(
+                        latitude=slice(min_lat, max_lat),
+                        longitude=slice(min_lon_360, max_lon_360)
                     )
 
-                ds_dropped = clipped_ds.drop_vars("nobs")
-                data_cube = xr.merge([data_cube, ds_dropped])
-    
+                ds_dropped = cropped_cube.drop_vars("nobs")
+                cropped_cube = xr.merge([data_cube, ds_dropped])
+
     else:
         for i in range(len(bands)):
             for image in bands_dict[bands[i]]:
@@ -170,4 +178,4 @@ def data_cube(stac_url, collection, start_date, end_date, tile=None, bbox=None, 
                 band_data_array = band_data_array.rename({'band_data': name_band(collection['collection'], bands[i])})
                 data_cube = xr.merge([data_cube, band_data_array])
 
-    return data_cube
+    return cropped_cube
