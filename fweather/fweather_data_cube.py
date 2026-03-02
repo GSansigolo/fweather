@@ -54,7 +54,7 @@ def data_cube(stac_url, collection, start_date, end_date, tile=None, bbox=None, 
         bands=bands
     )
     
-    if collection['collection'] not in ['landsat-2', 'LANDSAT-16D-1', 'S2-16D-2', 'S2_L2A-1', 'samet_daily-1', 'prec_merge_daily-1']:
+    if collection['collection'] not in ['landsat-2', 'LANDSAT-16D-1', 'S2-16D-2', 'S2_L2A-1', 'samet_daily-1', 'prec_merge_daily-1', 'prec_merge_hourly-1']:
         return print(f"{collection['collection']} collection not yet supported.")
     
     bands_dict = collection_get_list(stac, collection)
@@ -64,7 +64,7 @@ def data_cube(stac_url, collection, start_date, end_date, tile=None, bbox=None, 
         point = Point(lon, lat)
     else:
         bbox = tuple(map(float, collection['bbox'].split(',')))
-    
+
     sample_image_path = bands_dict[bands[0]][0]
     
     if (collection['collection'] == "samet_daily-1" or collection['collection'] == "prec_merge_daily-1"):
@@ -83,7 +83,7 @@ def data_cube(stac_url, collection, start_date, end_date, tile=None, bbox=None, 
         
     list_da = []
 
-    if (collection['collection'] == "prec_merge_daily-1"): 
+    if (collection['collection'] in ["prec_merge_daily-1", "prec_merge_hourly-1"]): 
         data_cube = xr.Dataset()
         for i in range(len(bands)):
             for image in bands_dict[bands[i]]:
@@ -104,7 +104,7 @@ def data_cube(stac_url, collection, start_date, end_date, tile=None, bbox=None, 
                         ds_dropped = ds_dropped.drop_vars(['time'])
                         ds_dropped = ds_dropped.drop_vars(['step'])
                         time = image.split("/")[-1].split('.')[0].split("_")[2]
-                        dt = datetime.strptime(time, '%Y%m%d') 
+                        dt = datetime.strptime(time, '%Y%m%d%H%M%S')
                         dt = pd.to_datetime(dt)
                         da = ds_dropped.assign_coords(time = dt)
                         da = da.expand_dims(dim="time")

@@ -27,8 +27,7 @@ def collection_get_list(stac, datacube):
         item_search = stac.search(
             collections=[collection],
             datetime=f"{start_date}T00:00:00Z/{end_date}T00:00:00Z",
-            bbox=bbox,
-            limit=365
+            bbox=bbox
         )
         
     band_dict = {}
