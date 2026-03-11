@@ -19,6 +19,18 @@
 Changes
 =======
 
+0.5 (2026-03-15)
+------------------
+
+* **MERGE Hourly**: Added full support for MERGE Hourly Precipitation data. 🛰️
+* **Update**: Updated the ``data_cube`` function to include a region filter, now uses a bounding box (``bbox``) to filter the region.
+* **Notebook Updates**: Remade the following Jupyter notebooks:
+    * ``fhws-datacube-precipitation.ipynb`` - Create a precipitation data cube using MERGE Daily
+    * ``fhws-datacube-temperature.ipynb`` - Create a temperature data cube using SAMeT Daily
+    * ``fhws-datacube-utils.ipynb`` - Use the save and load data cube support functions
+    * ``fhws-timeseries.ipynb`` - Retrieve meteorological time series
+* **Fix**: Fixed the ``tqdm`` progress bar during ``data_cube`` function to ensure it displays progress correctly.
+
 0.4 (2026-02-03)
 ------------------
 

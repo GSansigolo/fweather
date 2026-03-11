@@ -4,6 +4,7 @@ import tempfile
 import rasterio
 import pandas as pd
 from shapely import Point
+from tqdm import tqdm
 import xarray as xr
 from datetime import datetime
 from pyproj import Transformer
@@ -83,10 +84,10 @@ def data_cube(stac_url, collection, start_date, end_date, tile=None, bbox=None, 
         
     list_da = []
 
-    if (collection['collection'] in ["prec_merge_daily-1", "prec_merge_hourly-1"]): 
+    if (collection['collection'] == "prec_merge_daily-1"): 
         data_cube = xr.Dataset()
         for i in range(len(bands)):
-            for image in bands_dict[bands[i]]:
+            for image in tqdm(desc='Fetching... ', unit=" scenes", total=len(bands_dict[bands[i]]), iterable=bands_dict[bands[i]]):
                 try:
                     with tempfile.NamedTemporaryFile() as tmp:
                         fs.get(image, tmp.name)
@@ -104,7 +105,7 @@ def data_cube(stac_url, collection, start_date, end_date, tile=None, bbox=None, 
                         ds_dropped = ds_dropped.drop_vars(['time'])
                         ds_dropped = ds_dropped.drop_vars(['step'])
                         time = image.split("/")[-1].split('.')[0].split("_")[2]
-                        dt = datetime.strptime(time, '%Y%m%d%H%M%S')
+                        dt = datetime.strptime(time, '%Y%m%d') 
                         dt = pd.to_datetime(dt)
                         da = ds_dropped.assign_coords(time = dt)
                         da = da.expand_dims(dim="time")
@@ -123,11 +124,11 @@ def data_cube(stac_url, collection, start_date, end_date, tile=None, bbox=None, 
             latitude=slice(min_lat, max_lat),
             longitude=slice(min_lon_360, max_lon_360)
         )
-
+        
     elif (collection['collection'] == "samet_daily-1"): 
         data_cube = xr.Dataset()
         for i in range(len(bands)):
-            for image in bands_dict[bands[i]]:
+            for image in tqdm(desc='Fetching... ', unit=" scenes", total=len(bands_dict[bands[i]]), iterable=bands_dict[bands[i]]):
                 f = fs.open(image)
                 ds = xr.open_dataset(f)
                 
