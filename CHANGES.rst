@@ -30,6 +30,7 @@ Changes
     * ``fhws-datacube-utils.ipynb`` - Use the save and load data cube support functions
     * ``fhws-timeseries.ipynb`` - Retrieve meteorological time series
 * **Fix**: Fixed the ``tqdm`` progress bar during ``data_cube`` function to ensure it displays progress correctly.
+* **Fix**: Added a break in ``data_cube`` function when the the collection ``band`` is not found.
 
 0.4 (2026-02-03)
 ------------------

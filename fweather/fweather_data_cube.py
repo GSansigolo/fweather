@@ -66,6 +66,9 @@ def data_cube(stac_url, collection, start_date, end_date, tile=None, bbox=None, 
     else:
         bbox = tuple(map(float, collection['bbox'].split(',')))
 
+    if bands_dict[bands[0]][0]:
+        return print(f"{collection['collection']}'s {bands[0]} not found.")
+    
     sample_image_path = bands_dict[bands[0]][0]
     
     if (collection['collection'] == "samet_daily-1" or collection['collection'] == "prec_merge_daily-1"):
