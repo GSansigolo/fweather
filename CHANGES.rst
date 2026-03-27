@@ -31,6 +31,7 @@ Changes
     * ``fhws-timeseries.ipynb`` - Retrieve meteorological time series
 * **Fix**: Fixed the ``tqdm`` progress bar during ``data_cube`` function to ensure it displays progress correctly.
 * **Fix**: Added a break in ``data_cube`` function when the the collection ``band`` is not found.
+* **SAMeT Daily**: Fixed the support for SAMeT Daily data. 🛰️
 
 0.4 (2026-02-03)
 ------------------

@@ -65,11 +65,11 @@ def data_cube(stac_url, collection, start_date, end_date, tile=None, bbox=None, 
         point = Point(lon, lat)
     else:
         bbox = tuple(map(float, collection['bbox'].split(',')))
-
-    if bands_dict[bands[0]][0]:
+        
+    try:
+        sample_image_path = bands_dict[bands[0]][0]
+    except:
         return print(f"{collection['collection']}'s {bands[0]} not found.")
-    
-    sample_image_path = bands_dict[bands[0]][0]
     
     if (collection['collection'] == "samet_daily-1" or collection['collection'] == "prec_merge_daily-1"):
         data_proj = pyproj.CRS.from_epsg(4326)
@@ -123,33 +123,43 @@ def data_cube(stac_url, collection, start_date, end_date, tile=None, bbox=None, 
         min_lon_360 = min_lon + 360 if min_lon < 0 else min_lon
         max_lon_360 = max_lon + 360 if max_lon < 0 else max_lon
 
-        cropped_cube = data_cube.sel(
+        data_cube = data_cube.sel(
             latitude=slice(min_lat, max_lat),
             longitude=slice(min_lon_360, max_lon_360)
         )
         
     elif (collection['collection'] == "samet_daily-1"): 
-        data_cube = xr.Dataset()
+        list_da = []
         for i in range(len(bands)):
             for image in tqdm(desc='Fetching... ', unit=" scenes", total=len(bands_dict[bands[i]]), iterable=bands_dict[bands[i]]):
-                f = fs.open(image)
-                ds = xr.open_dataset(f)
-                
-                if (geom):
-                    cropped_cube = ds.sel(lon=lon,lat=lat,method='nearest')
-                else:
-                    min_lon, min_lat, max_lon, max_lat = map(float, collection['bbox'].split(','))
-                    
-                    min_lon_360 = min_lon + 360 if min_lon < 0 else min_lon
-                    max_lon_360 = max_lon + 360 if max_lon < 0 else max_lon
+                try:
 
-                    cropped_cube = data_cube.sel(
-                        latitude=slice(min_lat, max_lat),
-                        longitude=slice(min_lon_360, max_lon_360)
-                    )
+                    with fs.open(image) as f:
+                        ds = xr.open_dataset(f)
+                        
+                        if (geom):
+                            cropped_cube = ds.sel(lon=lon, lat=lat, method='nearest')
+                        else:
+                            min_lon, min_lat, max_lon, max_lat = map(float, collection['bbox'].split(','))
+                            cropped_cube = ds.sel(
+                                lon=slice(min_lon, max_lon),
+                                lat=slice(min_lat, max_lat)
+                            )
 
-                ds_dropped = cropped_cube.drop_vars("nobs")
-                cropped_cube = xr.merge([data_cube, ds_dropped])
+                        ds_dropped = cropped_cube.drop_vars("nobs", errors='ignore')
+                        
+                        time_str = image.split("/")[-1].split('.')[0].split("_")[2]
+                        dt = pd.to_datetime(datetime.strptime(time_str, '%Y%m%d'))
+                        
+                        da = ds_dropped.assign_coords(time=dt)
+                        da = da.expand_dims(dim="time")
+                        
+                        list_da.append(da)
+
+                except Exception as e:
+                    pass
+
+        data_cube = xr.combine_by_coords(list_da)
 
     else:
         for i in range(len(bands)):
@@ -182,4 +192,4 @@ def data_cube(stac_url, collection, start_date, end_date, tile=None, bbox=None, 
                 band_data_array = band_data_array.rename({'band_data': name_band(collection['collection'], bands[i])})
                 data_cube = xr.merge([data_cube, band_data_array])
 
-    return cropped_cube
+    return data_cube
