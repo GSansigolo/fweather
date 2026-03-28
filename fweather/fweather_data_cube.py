@@ -123,43 +123,39 @@ def data_cube(stac_url, collection, start_date, end_date, tile=None, bbox=None, 
         min_lon_360 = min_lon + 360 if min_lon < 0 else min_lon
         max_lon_360 = max_lon + 360 if max_lon < 0 else max_lon
 
-        data_cube = data_cube.sel(
+        clipped_cube = data_cube.sel(
             latitude=slice(min_lat, max_lat),
             longitude=slice(min_lon_360, max_lon_360)
         )
         
-    elif (collection['collection'] == "samet_daily-1"): 
+    elif (collection['collection'] == "samet_daily-1"):
         list_da = []
         for i in range(len(bands)):
             for image in tqdm(desc='Fetching... ', unit=" scenes", total=len(bands_dict[bands[i]]), iterable=bands_dict[bands[i]]):
                 try:
-
                     with fs.open(image) as f:
                         ds = xr.open_dataset(f)
                         
                         if (geom):
-                            cropped_cube = ds.sel(lon=lon, lat=lat, method='nearest')
+                            clipped_ds = ds.sel(lon=lon, lat=lat, method='nearest')
                         else:
                             min_lon, min_lat, max_lon, max_lat = map(float, collection['bbox'].split(','))
-                            cropped_cube = ds.sel(
+                            clipped_ds = ds.sel(
                                 lon=slice(min_lon, max_lon),
                                 lat=slice(min_lat, max_lat)
                             )
 
-                        ds_dropped = cropped_cube.drop_vars("nobs", errors='ignore')
+                        ds_dropped = clipped_ds.drop_vars("nobs", errors='ignore')
                         
-                        time_str = image.split("/")[-1].split('.')[0].split("_")[2]
-                        dt = pd.to_datetime(datetime.strptime(time_str, '%Y%m%d'))
-                        
-                        da = ds_dropped.assign_coords(time=dt)
-                        da = da.expand_dims(dim="time")
-                        
-                        list_da.append(da)
+                        ds_dropped.load()
+
+                        list_da.append(ds_dropped)
 
                 except Exception as e:
                     pass
-
-        data_cube = xr.combine_by_coords(list_da)
+        combined_ds = xr.concat(list_da, dim="time")
+        combined_ds.attrs.clear()
+        clipped_cube = combined_ds.sortby("time")
 
     else:
         for i in range(len(bands)):
@@ -190,6 +186,6 @@ def data_cube(stac_url, collection, start_date, end_date, tile=None, bbox=None, 
             else:
                 band_data_array = xr.combine_by_coords(list_da)
                 band_data_array = band_data_array.rename({'band_data': name_band(collection['collection'], bands[i])})
-                data_cube = xr.merge([data_cube, band_data_array])
+                clipped_cube = xr.merge([data_cube, band_data_array])
 
-    return data_cube
+    return clipped_cube
