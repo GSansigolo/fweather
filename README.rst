@@ -62,7 +62,7 @@ The development of software to manipulate meteorological data has always been ch
 
 In order to perform large-scale agriculture monitoring, we need to have dedicated packages that target the peculiarities of the large-scale data analysis. Meteorological data packages have been modeled for a specific type of operation, typically targeting analysts with programming background, and they in most part are not prepared to deal with big data. 
 
-This repository contains fweather, a free and open-source Python package for meteorological time series analysis. It used the SpatioTemporal Asset Catalog (STAC) to access meteorological data and retrieve it as virtual data cubes, facilitating the retrieval of time series. It provides methods of building a virtual data cube and retrieving time series of cumulative precipitation, daily precipitation, temperature and climate change projections. With the package, it’s possible to perform large-scale agriculture monitoring using meteorological time series with no need to download data locally and programming skills.
+This repository contains fweather, a free and open-source Python package for meteorological time series analysis. It used the SpatioTemporal Asset Catalog (STAC) to access meteorological data and retrieve it as virtual data cubes, facilitating the retrieval of time series. It provides methods of building a virtual data cube and retrieving time series of cumulative precipitation, daily precipitation, temperature, solar radiation and climate change projections. With the package, it’s possible to perform large-scale agriculture monitoring using meteorological time series with no need to download data locally and programming skills.
 
 The fweather package has a group of functions, some of which are: 
 
