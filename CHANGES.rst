@@ -19,9 +19,10 @@
 Changes
 =======
 
-0.5 (2026-03-15)
+0.5 (2026-04-15)
 ------------------
 
+* **GOES-GL-DSWRF Daily**: Add support for GOES-GL-DSWRF Daily and notebook example for solar radiation data. 🌞 
 * **MERGE Hourly**: Added full support for MERGE Hourly Precipitation data. 🛰️
 * **Update**: Updated the ``data_cube`` function to include a region filter, now uses a bounding box (``bbox``) to filter the region.
 * **Notebook Updates**: Remade the following Jupyter notebooks:
