@@ -173,11 +173,15 @@ def data_cube(stac_url, collection, start_date, end_date, tile=None, bbox=None, 
                                 lon=slice(min_lon, max_lon),
                                 lat=slice(min_lat, max_lat)
                             )
-
-                        clipped_ds.load()
-                        clipped_ds = clipped_ds * 0.1
-
-                        list_da.append(clipped_ds)
+                        # Assign time
+                        time = image.split("/")[-1].split(".")[0].split("_")[-1][0:8]
+                        dt = datetime.strptime(time, '%Y%m%d') 
+                        dt = pd.to_datetime(dt)
+                        da = clipped_ds.assign_coords(time = dt)
+                        da = da.expand_dims(dim="time")
+                        da = da * 0.1
+                        da.load()
+                        list_da.append(da)
 
                 except Exception as e:
                     pass
