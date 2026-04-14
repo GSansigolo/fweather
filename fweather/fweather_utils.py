@@ -11,6 +11,11 @@ BANDS_CONFIG = {
             {'dataset_name': "rdp"}
         ]
     },
+    "GOES-GL-DSWRF-Daily-1": {
+        "dswrf_daily_mean":[
+            {'dataset_name': "Band1"}
+        ]
+    }
 }
 
 def get_all_bands_configs():

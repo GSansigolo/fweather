@@ -55,7 +55,7 @@ def data_cube(stac_url, collection, start_date, end_date, tile=None, bbox=None, 
         bands=bands
     )
     
-    if collection['collection'] not in ['landsat-2', 'LANDSAT-16D-1', 'S2-16D-2', 'S2_L2A-1', 'samet_daily-1', 'prec_merge_daily-1', 'prec_merge_hourly-1']:
+    if collection['collection'] not in ['landsat-2', 'LANDSAT-16D-1', 'S2-16D-2', 'S2_L2A-1', 'samet_daily-1', 'prec_merge_daily-1', 'prec_merge_hourly-1', 'GOES-GL-DSWRF-Daily-1']:
         return print(f"{collection['collection']} collection not yet supported.")
     
     bands_dict = collection_get_list(stac, collection)
@@ -71,7 +71,8 @@ def data_cube(stac_url, collection, start_date, end_date, tile=None, bbox=None, 
     except:
         return print(f"{collection['collection']}'s {bands[0]} not found.")
     
-    if (collection['collection'] == "samet_daily-1" or collection['collection'] == "prec_merge_daily-1"):
+    if (collection['collection'] == "samet_daily-1" or collection['collection'] == "prec_merge_daily-1" or
+        collection['collection'] == "GOES-GL-DSWRF-Daily-1"):
         data_proj = pyproj.CRS.from_epsg(4326)
     else:
         with rasterio.open(sample_image_path) as src:
@@ -156,7 +157,33 @@ def data_cube(stac_url, collection, start_date, end_date, tile=None, bbox=None, 
         combined_ds = xr.concat(list_da, dim="time")
         combined_ds.attrs.clear()
         clipped_cube = combined_ds.sortby("time")
+    elif (collection['collection'] == "GOES-GL-DSWRF-Daily-1"):
+        list_da = []
+        for i in range(len(bands)):
+            for image in tqdm(desc='Fetching... ', unit=" scenes", total=len(bands_dict[bands[i]]), iterable=bands_dict[bands[i]]):
+                try:
+                    with fs.open(image) as f:
+                        ds = xr.open_dataset(f)
+                        
+                        if (geom):
+                            clipped_ds = ds.sel(lon=lon, lat=lat, method='nearest')
+                        else:
+                            min_lon, min_lat, max_lon, max_lat = map(float, collection['bbox'].split(','))
+                            clipped_ds = ds.sel(
+                                lon=slice(min_lon, max_lon),
+                                lat=slice(min_lat, max_lat)
+                            )
 
+                        clipped_ds.load()
+                        clipped_ds = clipped_ds * 0.1
+
+                        list_da.append(clipped_ds)
+
+                except Exception as e:
+                    pass
+        combined_ds = xr.concat(list_da, dim="time")
+        combined_ds.attrs.clear()
+        clipped_cube = combined_ds.sortby("time")
     else:
         for i in range(len(bands)):
             for image in bands_dict[bands[i]]:
