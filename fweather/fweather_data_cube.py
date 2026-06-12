@@ -127,8 +127,7 @@ def data_cube(stac_url, collection, start_date, end_date, tile=None, bbox=None, 
         clipped_cube = data_cube.sel(
             latitude=slice(min_lat, max_lat),
             longitude=slice(min_lon_360, max_lon_360)
-        )
-        
+        )      
     elif (collection['collection'] == "samet_daily-1"):
         list_da = []
         for i in range(len(bands)):

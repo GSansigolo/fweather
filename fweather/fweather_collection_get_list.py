@@ -1,4 +1,3 @@
-from tqdm import tqdm
 
 def collection_get_list(stac, datacube):
     """
