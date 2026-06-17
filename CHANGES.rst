@@ -19,7 +19,7 @@
 Changes
 =======
 
-0.5 (2026-04-15)
+0.5 (2026-06-17)
 ------------------
 
 * **GOES-GL-DSWRF Daily**: Add support for GOES-GL-DSWRF Daily and notebook example for solar radiation data. 🌞 
