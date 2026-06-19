@@ -19,7 +19,7 @@
 Changes
 =======
 
-0.5.1 (2026-06-18)
+0.5.1 (2026-06-19)
 ------------------
 * **Fix**: Resolved error on ``data_cube`` function related to the Hourly collection.
 
