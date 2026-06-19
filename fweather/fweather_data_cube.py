@@ -108,8 +108,12 @@ def data_cube(stac_url, collection, start_date, end_date, tile=None, bbox=None, 
                         ds_dropped = ds_dropped.drop_vars(['surface'])
                         ds_dropped = ds_dropped.drop_vars(['time'])
                         ds_dropped = ds_dropped.drop_vars(['step'])
+
                         time = image.split("/")[-1].split('.')[0].split("_")[2]
-                        dt = datetime.strptime(time, '%Y%m%d%H%M%S')
+                        if collection['collection'] == "prec_merge_hourly-1":
+                            dt = datetime.strptime(time, '%Y%m%d%H%M%S')
+                        else:
+                            dt = datetime.strptime(time, '%Y%m%d')
                         dt = pd.to_datetime(dt)
                         da = ds_dropped.assign_coords(time = dt)
                         da = da.expand_dims(dim="time")
