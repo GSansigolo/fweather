@@ -19,6 +19,10 @@
 Changes
 =======
 
+0.5.2 (2026-07-06)
+------------------
+* **Fix**: Resolved error on ``get_timeseries`` function for retrieving meteorological time series data.
+
 0.5.1 (2026-06-19)
 ------------------
 * **Fix**: Resolved error on ``data_cube`` function related to the Hourly collection.

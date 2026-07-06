@@ -91,19 +91,24 @@ coverage_proj = pyproj.CRS.from_wkt('''
         AXIS["Northing",NORTH]]''')
 
 def get_timeseries_data_cube(datacube, geom, band):
+    lon_goal = geom[0]['coordinates'][0]
+    lat_goal = geom[0]['coordinates'][1]
     
-    if "latitude" in datacube.coords:
-        band_ts = datacube.sel(latitude=geom[0]['coordinates'][0], longitude=geom[0]['coordinates'][1], method='nearest')[band].values
-    elif "lat" in datacube.coords:
-        band_ts = datacube.sel(lat=geom[0]['coordinates'][0], lon=geom[0]['coordinates'][1], method='nearest')[band].values
-    else:
-        band_ts = datacube.sel(x=geom[0]['coordinates'][0], y=geom[0]['coordinates'][1], method='nearest')[band].values
+    if "latitude" in datacube.coords and "longitude" in datacube.coords:
+        band_ts = datacube.sel(latitude=lat_goal, longitude=lon_goal, method='nearest')[band].values
+        
+    elif "lat" in datacube.coords and "lon" in datacube.coords:
+        band_ts = datacube.sel(lat=lat_goal, lon=lon_goal, method='nearest')[band].values
+        
+    elif "y" in datacube.coords and "x" in datacube.coords:
+        band_ts = datacube.sel(y=lat_goal, x=lon_goal, method='nearest')[band].values
+        
     timeline = datacube.coords['time'].values
-    ts = []
-    for value in band_ts:
-        ts.append(value)
-    return dict(values=ts, timeline=timeline)
-
+    
+    return {
+        "values": band_ts.tolist(), 
+        "timeline": timeline.tolist()
+    }
 
 def geometry_collides_with_bbox(geometry,input_bbox):
     """

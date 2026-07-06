@@ -67,7 +67,7 @@ def get_timeseries(stac_url, collection, start_date, end_date, band, geom):
         return dict(values=ts, timeline=tl)
 
 
-def get_bbox(geom, radius_meters=20):
+def get_bbox(geom, radius_meters=2500):
 
     lat, lon = geom[0]['coordinates'] 
     
